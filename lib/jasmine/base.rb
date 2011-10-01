@@ -40,17 +40,17 @@ module Jasmine
   end
 
   def self.rspec2?
-    Gem::Specification::find_by_name "rspec", ">= 2.0"
-  rescue
-    Gem.available? "rspec", ">= 2.0"
+    gem_available? "rspec", ">= 2.0"
   end
 
   def self.rails3?
     return Rails.version.split(".").first.to_i == 3 if defined? Rails
-    begin
-      Gem::Specification::find_by_name "rails", ">= 3.0"
-    rescue Gem::LoadError => e
-      Gem.available? "rails", ">= 3.0"
-    end
+    gem_available? "rails", ">= 3.0"
+  end
+  
+  def self.gem_available?(name, version)
+    Gem::Specification::find_by_name name, version
+  rescue Gem::LoadError, NoMethodError
+    Gem.available? name, version
   end
 end
